@@ -20,6 +20,7 @@ class Generator(nn.Module):
             self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(6, 4)),
             self.make_gen_block(hidden_dim, int(hidden_dim/2), kernel_size=(6, 4)),
             self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(27, 4), final_layer=True),
+            # todo: mejorar arquitectura Red
         )
 
     def make_gen_block(self, input_channels, output_channels, kernel_size=3, stride=2, final_layer=False):
