@@ -7,6 +7,8 @@ import numpy as np
 from scipy import signal
 import hashlib
 
+import h5py
+
 
 def open_bdd(nombre):
     return pd.read_json(nombre)
@@ -161,3 +163,25 @@ def guardar_base_npy(base, keydata='Data', keytype='Type'):
     return dictionary
 
 
+def guardar_base_h5(base, dim1, dim2, keydata='Data', keytype='Type'):
+    fileName = 'baseh5/data1.h5'
+    numOfSamples = base.shape[0]
+    with h5py.File(fileName, "w") as out:
+        out.create_dataset("X_train", (numOfSamples, dim1, dim2), dtype='float64')
+        out.create_dataset("Y_train", (numOfSamples, 1), dtype='u1')
+    with h5py.File(fileName, "a") as out:
+        for i in range(base.shape[0]):
+            muestra = base[keydata][i]
+            tipo = base[keytype][i]
+            tag = -1
+            if tipo == 'VT':
+                tag = 0
+            elif tipo == 'LP':
+                tag = 1
+            muestra_arr_ori = np.array(muestra)
+            samplerate = base['SampleRate'][i]
+            f_ori, t_ori, zxx_ori = signal.stft(muestra_arr_ori, fs=samplerate, padded=True)
+            espectro_magnitud = np.abs(zxx_ori)
+            #espectro_magnitud = np.expand_dims(espectro_magnitud, axis=-1)
+            out['X_train'][i, ...] = espectro_magnitud
+            out['Y_train'][i, ...] = tag
