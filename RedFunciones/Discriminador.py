@@ -18,7 +18,7 @@ class Discriminator(nn.Module):
             self.make_disc_block(hidden_dim * 2, 1, final_layer=True),
         )
 
-    def make_disc_block(self, input_channels, output_channels, kernel_size=4, stride=2, final_layer=False):
+    def make_disc_block(self, input_channels, output_channels, kernel_size=(5,4), stride=2, final_layer=False):
         """
         Function to return a sequence of operations corresponding to a discriminator block of the DCGAN;
         a convolution, a batchnorm (except in the final layer), and an activation (except in the final layer).
@@ -38,7 +38,7 @@ class Discriminator(nn.Module):
             )
         else:
             return nn.Sequential(
-                nn.Conv2d(input_channels, output_channels, kernel_size, stride),
+                nn.Conv2d(input_channels, output_channels, (30,6), stride),
             )
 
     def forward(self, image):
