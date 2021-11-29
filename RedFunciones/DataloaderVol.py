@@ -19,7 +19,7 @@ class VolcanoDatasetH5(Dataset):
         tag = self.file['Y_train'][index, ...]
         # Preprocessing each image
         if self.transform is not None:
-            x = self.transform(sample)
+            sample = self.transform(sample)
         return sample, int(tag)
 
     def __len__(self):

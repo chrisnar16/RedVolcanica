@@ -23,6 +23,8 @@ def extraer_señales(base, tipo, keytype='Type', keysp='StartPoint', keyep='EndP
     # dropnna quita na en esos valores
     base_fil.dropna(subset=[keysp], inplace=True)
     base_fil.dropna(subset=[keyep], inplace=True)
+    #array_has_nan = np.isnan(np.sum(base[keydata]))
+    #base_fil = base_fil[not array_has_nan]
     base_fil.reset_index(drop=True, inplace=True)  # todo: revisar esto
     return base_fil
 
@@ -130,10 +132,10 @@ def quitar_dc(base, keydata='Data', keysp='StartPoint', keyep='EndPoint'):
         rms = np.mean(evento)
         evento = evento - rms
         muestra[inicio:fin] = evento
-        ruido = muestra[fin+1:]
+        ruido = muestra[fin + 1:]
         rms_ruido = np.mean(ruido)
         ruido = ruido - rms_ruido
-        muestra[fin+1:] = ruido
+        muestra[fin + 1:] = ruido
         base[keydata][i] = muestra
     return base
 
@@ -151,8 +153,8 @@ def guardar_base_npy(base, keydata='Data', keytype='Type'):
         raiz = "basedesglosada/"
         suma = 0
         for j in range(100):
-            suma = suma+espectro_magnitud[j]
-        str2hash = (str(suma)+tipo).encode()
+            suma = suma + espectro_magnitud[j]
+        str2hash = (str(suma) + tipo).encode()
         hashh = hashlib.md5(str2hash)
         hassh_ex = hashh.hexdigest()
         dirr = raiz + hassh_ex
@@ -164,7 +166,7 @@ def guardar_base_npy(base, keydata='Data', keytype='Type'):
 
 
 def guardar_base_h5(base, dim1, dim2, keydata='Data', keytype='Type'):
-    fileName = 'baseh5/data1.h5'
+    fileName = 'baseh5/data2.h5'
     numOfSamples = base.shape[0]
     with h5py.File(fileName, "w") as out:
         out.create_dataset("X_train", (numOfSamples, dim1, dim2), dtype='float64')
@@ -182,6 +184,18 @@ def guardar_base_h5(base, dim1, dim2, keydata='Data', keytype='Type'):
             samplerate = base['SampleRate'][i]
             f_ori, t_ori, zxx_ori = signal.stft(muestra_arr_ori, fs=samplerate, padded=True)
             espectro_magnitud = np.abs(zxx_ori)
-            #espectro_magnitud = np.expand_dims(espectro_magnitud, axis=-1)
+            # espectro_magnitud = np.expand_dims(espectro_magnitud, axis=-1)
             out['X_train'][i, ...] = espectro_magnitud
             out['Y_train'][i, ...] = tag
+
+
+def drop_data_na(base, keysp='StartPoint', keydata='Data'):
+    for i in range(base.shape[0]):
+        muestra = np.array(base[keydata][i])
+        array_has_nan = np.isnan(np.sum(muestra))
+        if array_has_nan.any():
+            base[keysp][i] = np.NaN
+    base_fil = base
+    base_fil.dropna(subset=[keysp], inplace=True)
+    base_fil.reset_index(drop=True, inplace=True)  # todo: revisar esto
+    return base_fil
