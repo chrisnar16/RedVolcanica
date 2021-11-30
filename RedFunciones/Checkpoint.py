@@ -2,9 +2,10 @@ from datetime import date
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import os
 
-
-DIRECTORY='/content/drive/MyDrive/Tesis/Git/RedVolcanica/checkpoints/'
+cwd = os.getcwd()
+DIRECTORY = cwd + '/checkpoints/'
 
 
 def save_weighs(gen, disc, gen_opt, disc_opt, epoch, gen_loss, dis_loss, nombre):
