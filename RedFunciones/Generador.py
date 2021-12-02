@@ -10,16 +10,18 @@ class Generator(nn.Module):
               (MNIST is black-and-white, so 1 channel is your default)
         hidden_dim: the inner dimension, a scalar
     '''
-    def __init__(self, input_dim=10, im_chan=1, hidden_dim=64):
+    def __init__(self, input_dim=10, im_chan=1, hidden_dim=64): #len: 1, 1
         super(Generator, self).__init__()
         self.input_dim = input_dim
         # Build the neural network
         self.gen = nn.Sequential(
-            self.make_gen_block(input_dim, hidden_dim * 4, kernel_size=(5, 3)),
-            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(6, 4), stride=1),
-            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(6, 4)),
-            self.make_gen_block(hidden_dim, int(hidden_dim/2), kernel_size=(6, 4)),
-            self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(27, 4), final_layer=True),
+            self.make_gen_block(input_dim, hidden_dim * 16, kernel_size=(6, 2)), # 6,2
+            self.make_gen_block(hidden_dim * 16, hidden_dim * 8, kernel_size=(6, 3), stride=(2, 1)),# 16,4
+            self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=(6, 3), stride=(2, 1)),# 36,6
+            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(6, 3), stride=(1, 1)),# 41,8
+            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(11, 5), stride=(1, 1)),# 51,12
+            self.make_gen_block(hidden_dim , int(hidden_dim/2), kernel_size=(11, 5), stride=(1, 1)),# 61,16
+            self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(9, 3), stride=(2, 2), final_layer=True),# 129, 33
             # todo: mejorar arquitectura Red
         )
 
@@ -39,11 +41,11 @@ class Generator(nn.Module):
             return nn.Sequential(
                 nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
                 nn.BatchNorm2d(output_channels),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2, inplace=True),
             )
         else:
             return nn.Sequential(
-                nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride=(2,1)),
+                nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
                 nn.Tanh(),
             )
 

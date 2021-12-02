@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 import pandas as pd
+from torchvision import transforms
 
 
 class VolcanoDatasetH5(Dataset):
@@ -18,6 +19,8 @@ class VolcanoDatasetH5(Dataset):
         sample = self.file['X_train'][index, ...]
         tag = self.file['Y_train'][index, ...]
         # Preprocessing each image
+        tst = transforms.ToTensor()
+        sample = tst(sample).float()
         if self.transform is not None:
             sample = self.transform(sample)
         return sample, int(tag)
