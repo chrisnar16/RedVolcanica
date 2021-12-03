@@ -10,7 +10,7 @@ class Generator(nn.Module):
               (MNIST is black-and-white, so 1 channel is your default)
         hidden_dim: the inner dimension, a scalar
     '''
-    def __init__(self, input_dim=10, im_chan=1, hidden_dim=64): #len: 1, 1
+    def __init__(self, input_dim=10, im_chan=1, hidden_dim=32): #len: 1, 1
         super(Generator, self).__init__()
         self.input_dim = input_dim
         # Build the neural network
