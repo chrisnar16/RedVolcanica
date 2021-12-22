@@ -12,7 +12,7 @@ class Discriminator(nn.Module):
     """
     def __init__(self, im_chan=1, hidden_dim=64):
         super(Discriminator, self).__init__()
-        self.disc = nn.Sequential( # 128, 33
+        self.disc = nn.Sequential( # 129, 33
             self.make_disc_block(im_chan, hidden_dim, kernel_size=(7, 3), stride=(2, 2)),# 62, 16
             self.make_disc_block(hidden_dim, hidden_dim * 4, kernel_size=(8, 3), stride=(2, 1)), # 28, 14
             self.make_disc_block(hidden_dim * 4, hidden_dim * 8, kernel_size=(8, 2), stride=(2, 2)),# 11, 7
