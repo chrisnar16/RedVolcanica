@@ -20,7 +20,9 @@ class VolcanoDatasetH5(Dataset):
         tag = self.file['Y_train'][index, ...]
         # Preprocessing each image
         tst = transforms.ToTensor()
+        eps=1e-7
         sample = tst(sample)
+        sample = torch.log(sample + eps)
         if self.transform is not None:
             sample = self.transform(sample)
         return sample, int(tag)

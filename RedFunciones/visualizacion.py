@@ -2,6 +2,7 @@ from torchvision.utils import make_grid
 import matplotlib.pyplot as plt
 import PrePross.grifflin as grifflin
 import numpy as np
+import torch
 
 def show_tensor_images(image_tensor, num_images=25, size=(1, 28, 28), nrow=5, show=True):
     '''
@@ -18,6 +19,7 @@ def show_tensor_images(image_tensor, num_images=25, size=(1, 28, 28), nrow=5, sh
         
 def show_time_domine_images(image_tensor, std, mean, real,  num_images=25, size=(1, 28, 28), nrow=5, show=True):
     image_tensor = image_tensor * std + mean
+    image_tensor = torch.exp(image_tensor)
     image_unflat = image_tensor.cpu().detach().numpy()
     samplerate = 50
     
