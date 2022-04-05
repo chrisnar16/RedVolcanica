@@ -15,13 +15,15 @@ class Generator(nn.Module):
         self.input_dim = input_dim
         # Build the neural network
         self.gen = nn.Sequential(
-            self.make_gen_block(input_dim, hidden_dim * 16, kernel_size=(6, 2)), # 6,2
-            self.make_gen_block(hidden_dim * 16, hidden_dim * 8, kernel_size=(6, 3), stride=(2, 1)),# 16,4
-            self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=(6, 3), stride=(2, 1)),# 36,6
-            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(6, 3), stride=(1, 1)),# 41,8
-            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(11, 5), stride=(1, 1)),# 51,12
-            self.make_gen_block(hidden_dim , int(hidden_dim/2), kernel_size=(11, 5), stride=(1, 1)),# 61,16
-            self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(9, 3), stride=(2, 2), final_layer=True),# 129, 33
+            
+            self.make_gen_block(input_dim, hidden_dim * 32, kernel_size=(13, 4)), # 13,4
+            self.make_gen_block(hidden_dim * 32, hidden_dim * 16, kernel_size=(13, 4), stride=(1, 1)),# 25, 7
+            self.make_gen_block(hidden_dim * 16, hidden_dim * 8, kernel_size=(13, 4), stride=(1, 1)),# 37,10
+            self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=(13, 4), stride=(2, 2)),# 85,22
+            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(13, 4), stride=(1, 1)),# 97,25
+            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(13, 4), stride=(1, 1)),# 109,28
+            self.make_gen_block(hidden_dim, int(hidden_dim/2), kernel_size=(13, 4), stride=(1, 1)),# 121,31
+            self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(9, 3), stride=(1, 1), final_layer=True),# 129, 33
             # todo: mejorar arquitectura Red
         )
 
