@@ -95,9 +95,10 @@ def normalizar_tamanio_base(base, numero_segundos, keydata='Data', keysp='StartP
         tamanio_actual = fin - inicio
         # Caso: señal mayor a objetibo, recorto señal(evento incompleto)
         if tamanio_actual > objetivo:
-            señal_ret = evento_ori[0:objetivo]  # TODO:Encontarr alternativa a este caso
-            base[keyep][i] = objetivo - 1
-            print('Here R')
+            base[keysp][i] = np.NaN
+            # señal_ret = evento_ori[0:objetivo]  # TODO:Encontarr alternativa a este caso
+            # base[keyep][i] = objetivo - 1
+            print('Here señal grande')
         elif tamanio_actual < objetivo:
             evento_ori = muestra[inicio:]
             base[keyep][i] = fin - inicio - 1
@@ -121,6 +122,8 @@ def normalizar_tamanio_base(base, numero_segundos, keydata='Data', keysp='StartP
             señal_ret = evento_ori
         base[keydata][i] = señal_ret
         base[keyduration][i] = objetivo
+    base.dropna(subset=[keysp], inplace=True)
+    base.reset_index(drop=True, inplace=True)
 
 
 def quitar_dc(base, keydata='Data', keysp='StartPoint', keyep='EndPoint'):
@@ -165,8 +168,8 @@ def guardar_base_npy(base, keydata='Data', keytype='Type'):
     return dictionary
 
 
-def guardar_base_h5(base, dim1, dim2, keydata='Data', keytype='Type'):
-    fileName = 'baseh5/data2.h5'
+def guardar_base_h5(base, dim1, dim2, keydata='Data', keytype='Type', nombre='data2.h5'):
+    fileName = 'baseh5/' + nombre + '.h5'
     numOfSamples = base.shape[0]
     with h5py.File(fileName, "w") as out:
         out.create_dataset("X_train", (numOfSamples, dim1, dim2), dtype='float64')
@@ -199,3 +202,31 @@ def drop_data_na(base, keysp='StartPoint', keydata='Data'):
     base_fil.dropna(subset=[keysp], inplace=True)
     base_fil.reset_index(drop=True, inplace=True)  # todo: revisar esto
     return base_fil
+
+
+def potencia_señal(señal):
+    n = señal.shape[0]
+    return (1/n)*(np.sum(np.power(señal, 2)))
+
+
+def snr_señal(muestra, inicio, fin):
+    evento = muestra[inicio:fin]
+    potencia_evento = potencia_señal(evento)
+    ruido = muestra[fin:]
+    potencia_ruido = potencia_señal(ruido)
+    snr = 10 * np.log10(potencia_evento / potencia_ruido)
+    return snr
+
+
+def drop_data_ruido(base, umbral,  keydata='Data',keysp='StartPoint', keyep='EndPoint'):
+    for i in range(base.shape[0]):
+        muestra = np.array(base[keydata][i])
+        inicio = int(base[keysp][i])
+        fin = int(base[keyep][i])
+        snr = snr_señal(muestra, inicio, fin)
+        if snr < umbral:
+            base[keysp][i] = np.NaN
+    base.dropna(subset=[keysp], inplace=True)
+    base.reset_index(drop=True, inplace=True)
+    return base
+
