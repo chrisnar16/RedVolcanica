@@ -230,3 +230,18 @@ def drop_data_ruido(base, umbral,  keydata='Data',keysp='StartPoint', keyep='End
     base.reset_index(drop=True, inplace=True)
     return base
 
+
+def normalize(arr, t_min, t_max):
+    diff = t_max - t_min
+    diff_arr = abs(max(max(arr), min(arr)))
+    arr = arr/diff_arr
+    return arr
+
+
+def normailizar_muestras(base,  keydata='Data'):
+    for i in range(base.shape[0]):
+        muestra = np.array(base[keydata][i])
+        muestra_normalizada = normalize(muestra, -1, 1)
+        base[keydata][i] = muestra_normalizada
+        print(i)
+    return base
