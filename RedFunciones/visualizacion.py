@@ -18,9 +18,9 @@ def show_tensor_images(image_tensor, num_images=25, size=(1, 28, 28), nrow=5, sh
 
         
 def show_time_domine_images(image_tensor, std, mean, real,  num_images=25, size=(1, 28, 28), nrow=5, show=True):
-    image_tensor = image_tensor
-    image_tensor = torch.exp(image_tensor)
+    #image_tensor = torch.pow(10, image_tensor)
     image_unflat = image_tensor.cpu().detach().numpy()
+    image_unflat = image_unflat
     samplerate = 50
     
     x = np.squeeze(image_unflat[2])
