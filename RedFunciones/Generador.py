@@ -43,7 +43,7 @@ class Generator(nn.Module):
             return nn.Sequential(
                 nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
                 nn.BatchNorm2d(output_channels),
-                nn.LeakyReLU(0.2, inplace=True),
+                nn.ReLU(inplace=True),
             )
         else:
             return nn.Sequential(
