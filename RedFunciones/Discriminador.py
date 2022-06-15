@@ -10,7 +10,7 @@ class Discriminator(nn.Module):
             (MNIST is black-and-white, so 1 channel is your default)
       hidden_dim: the inner dimension, a scalar
     """
-    def __init__(self, im_chan=1, hidden_dim=64):
+    def __init__(self, im_chan=1, hidden_dim=16):
         super(Discriminator, self).__init__()
         self.disc = nn.Sequential( # 129, 33
             self.make_disc_block(im_chan, hidden_dim, kernel_size=(13, 4), stride=(1, 1)),# 59, 30
@@ -42,7 +42,7 @@ class Discriminator(nn.Module):
         if not final_layer:
             return nn.Sequential(
                 nn.Conv2d(input_channels, output_channels, kernel_size, stride),
-                nn.BatchNorm2d(output_channels),
+                #nn.BatchNorm2d(output_channels),
                 nn.LeakyReLU(0.2, inplace=True),
             )
         else:

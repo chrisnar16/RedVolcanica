@@ -1,0 +1,17 @@
+[I 15:18:03.648 NotebookApp] Serving notebooks from local directory: /home/fgrijalva/Red
+[I 15:18:03.648 NotebookApp] Jupyter Notebook 6.3.0 is running at:
+[I 15:18:03.649 NotebookApp] http://localhost:8898/?token=a6e79f2f8662636f3f61c7edfed4cba6decb5b073f5af6da
+[I 15:18:03.649 NotebookApp]  or http://127.0.0.1:8898/?token=a6e79f2f8662636f3f61c7edfed4cba6decb5b073f5af6da
+[I 15:18:03.649 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 15:18:03.660 NotebookApp] No web browser found: could not locate runnable browser.
+[C 15:18:03.660 NotebookApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///home/fgrijalva/.local/share/jupyter/runtime/nbserver-370-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8898/?token=a6e79f2f8662636f3f61c7edfed4cba6decb5b073f5af6da
+     or http://127.0.0.1:8898/?token=a6e79f2f8662636f3f61c7edfed4cba6decb5b073f5af6da
+slurmstepd: error: *** JOB 41064 ON apollo-2 CANCELLED AT 2022-06-15T10:44:09 ***
+[C 10:44:09.191 NotebookApp] received signal 15, stopping
+[I 10:44:09.199 NotebookApp] Shutting down 0 kernels
+[I 10:44:09.209 NotebookApp] Shutting down 0 terminals

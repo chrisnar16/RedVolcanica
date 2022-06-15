@@ -10,20 +10,20 @@ class Generator(nn.Module):
               (MNIST is black-and-white, so 1 channel is your default)
         hidden_dim: the inner dimension, a scalar
     '''
-    def __init__(self, input_dim=10, im_chan=1, hidden_dim=32): #len: 1, 1
+    def __init__(self, input_dim=10, im_chan=1, hidden_dim=16): #len: 1, 1
         super(Generator, self).__init__()
         self.input_dim = input_dim
         # Build the neural network
         self.gen = nn.Sequential(
             
-            self.make_gen_block(input_dim, hidden_dim * 32, kernel_size=(13, 4)), # 13,4
-            self.make_gen_block(hidden_dim * 32, hidden_dim * 16, kernel_size=(13, 4), stride=(1, 1)),# 25, 7
-            self.make_gen_block(hidden_dim * 16, hidden_dim * 8, kernel_size=(13, 4), stride=(1, 1)),# 37,10
-            self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=(13, 4), stride=(2, 2)),# 85,22
-            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(13, 4), stride=(1, 1)),# 97,25
-            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(13, 4), stride=(1, 1)),# 109,28
-            self.make_gen_block(hidden_dim, int(hidden_dim/2), kernel_size=(13, 4), stride=(1, 1)),# 121,31
-            self.make_gen_block(int(hidden_dim/2), im_chan, kernel_size=(9, 3), stride=(1, 1), final_layer=True),# 129, 33
+            self.make_gen_block(input_dim, hidden_dim * 64, kernel_size=(13, 4)), # 13,4
+            self.make_gen_block(hidden_dim * 64, hidden_dim * 32, kernel_size=(13, 4), stride=(1, 1)),# 25, 7
+            self.make_gen_block(hidden_dim * 32, hidden_dim * 16, kernel_size=(13, 4), stride=(1, 1)),# 37,10
+            self.make_gen_block(hidden_dim * 16, hidden_dim * 8, kernel_size=(13, 4), stride=(2, 2)),# 85,22
+            self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=(13, 4), stride=(1, 1)),# 97,25
+            self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=(13, 4), stride=(1, 1)),# 109,28
+            self.make_gen_block(hidden_dim * 2, hidden_dim, kernel_size=(13, 4), stride=(1, 1)),# 121,31
+            self.make_gen_block(hidden_dim, im_chan, kernel_size=(9, 3), stride=(1, 1), final_layer=True),# 129, 33
             # todo: mejorar arquitectura Red
         )
 
@@ -42,7 +42,7 @@ class Generator(nn.Module):
         if not final_layer:
             return nn.Sequential(
                 nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
-                nn.BatchNorm2d(output_channels),
+                #nn.BatchNorm2d(output_channels),
                 nn.ReLU(inplace=True),
             )
         else:

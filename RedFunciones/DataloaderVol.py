@@ -21,12 +21,13 @@ class VolcanoDatasetH5(Dataset):
         # Preprocessing each image
         #tst = transforms.ToTensor()
         sample = torch.from_numpy(sampleB)
-        mean = sample.mean()
-        std = sample.std()
+        #mean = sample.mean()
+        #std = sample.std()
         maxx = sample.max()
-        sample = (sample - mean) /std
-        maxx = sample.max()
-        sample = sample/maxx
+        minn = sample.min()
+        sample = ((sample - minn) /(maxx-minn))
+        #sample = (2*(sample - minn) /(maxx-minn)) - 1
+        #maxx = sample.max()
         sample = torch.unsqueeze(sample, 0)
         eps = 1e-7
         #sample = tst(sample)
