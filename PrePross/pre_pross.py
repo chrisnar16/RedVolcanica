@@ -85,6 +85,7 @@ def normalizar_muestras(base, numero_muestras, keydata='Data', keyduration='Dura
 # normalisa tamanio en segundos
 def normalizar_tamanio_base(base, numero_segundos, keydata='Data', keysp='StartPoint', keyep='EndPoint',
                             keysr='SampleRate', keyduration='Duration'):
+    random.seed(0)
     for i in range(base.shape[0]):
         muestra = base[keydata][i]
         objetivo = numero_segundos * base[keysr][i]
