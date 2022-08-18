@@ -78,7 +78,6 @@ def normalizar_muestras(base, numero_muestras, keydata='Data', keyduration='Dura
         base[keyduration][i] = numero_muestras
         fin = int(base[keyep][i])
         if fin > numero_muestras:
-            print('Here NM')
             base[keyep][i] = numero_muestras - 1
 
 
@@ -244,5 +243,4 @@ def normailizar_muestras(base,  keydata='Data'):
         muestra = np.array(base[keydata][i])
         muestra_normalizada = normalize(muestra, -1, 1)
         base[keydata][i] = muestra_normalizada
-        print(i)
     return base
